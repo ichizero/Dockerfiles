@@ -103,6 +103,8 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 # For testing X11 forward
 RUN apt-get install -y x11-apps
 
+RUN apt-get install -y python3-tk
+
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 
