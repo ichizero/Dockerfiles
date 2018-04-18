@@ -5,6 +5,7 @@ LABEL maintainer="ichizero"
 RUN apt-get update
 
 RUN apt-get install -y \
+		cmake \
 		wget \
 		unzip
 
