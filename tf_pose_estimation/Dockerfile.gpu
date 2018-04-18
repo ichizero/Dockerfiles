@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest-py3
+FROM tensorflow/tensorflow:latest-gpu-py3
 
 LABEL maintainer="ichizero"
 
@@ -71,7 +71,7 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip 
   -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.0/modules \
   -DBUILD_TIFF=ON \
   -DBUILD_opencv_java=OFF \
-  -DWITH_CUDA=OFF \
+  -DWITH_CUDA=ON \
   -DENABLE_AVX=ON \
   -DWITH_OPENGL=ON \
   -DWITH_OPENCL=ON \
@@ -92,7 +92,7 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip 
   && rm -r /opencv-3.4.0 \
   && rm -r /opencv_contrib-3.4.0
 
-# ssh settings ref) https://qiita.com/gitcell/items/8b1f154edc26def7ecce
+  # ssh settings ref) https://qiita.com/gitcell/items/8b1f154edc26def7ecce
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 # Should change it
