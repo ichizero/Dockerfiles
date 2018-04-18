@@ -111,7 +111,7 @@ RUN apt-get clean
 RUN pip3 install  --no-cache-dir \
 	cython \
 	argparse \
-	matploplib \
+	matplotlib \
 	tqdm \
 	requests \
 	fire \
