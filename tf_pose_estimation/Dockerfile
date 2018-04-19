@@ -92,21 +92,8 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip 
   && rm -r /opencv-3.4.0 \
   && rm -r /opencv_contrib-3.4.0
 
-# ssh settings ref) https://qiita.com/gitcell/items/8b1f154edc26def7ecce
-RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-# Should change it
-RUN echo 'root:openpose' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-# For testing X11 forward
-RUN apt-get install -y x11-apps
-
-RUN apt-get install -y python3-tk
-
-EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+RUN apt-get install -y x11-apps \
+  python3-tk
 
 RUN apt-get clean
 
@@ -119,4 +106,4 @@ RUN pip3 install  --no-cache-dir \
   fire \
   dill
 
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT ["/bin/bash"]
