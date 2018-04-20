@@ -61,8 +61,8 @@ RUN pip3 --no-cache-dir install \
 WORKDIR /
 RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip \
   && wget https://github.com/opencv/opencv_contrib/archive/3.4.0.zip -O opencv_contrib-3.4.0.zip \
-  && unzip opencv-3.4.0.zip \
-  && unzip opencv_contrib-3.4.0.zip \
+  && unzip -q opencv-3.4.0.zip \
+  && unzip -q opencv_contrib-3.4.0.zip \
   && cd opencv-3.4.0 \
   && mkdir build \
   && cd build \
