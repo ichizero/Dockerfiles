@@ -7,7 +7,8 @@ RUN apt-get update
 RUN apt-get install -y \
   cmake \
   wget \
-  unzip
+  unzip \
+  cuda-core-9-0
 
 # ref) http://www.python36.com/how-to-install-opencv340-on-ubuntu1604/
 RUN apt-get install -y build-essential
@@ -59,8 +60,8 @@ RUN pip3 --no-cache-dir install \
   py3nvml
 
 WORKDIR /
-RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip \
-  && wget https://github.com/opencv/opencv_contrib/archive/3.4.0.zip -O opencv_contrib-3.4.0.zip \
+RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip \
+  && wget https://github.com/opencv/opencv_contrib/archive/3.4.1.zip -O opencv_contrib-3.4.1.zip \
   && unzip -q opencv-3.4.0.zip \
   && unzip -q opencv_contrib-3.4.0.zip \
   && cd opencv-3.4.0 \
@@ -74,7 +75,7 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip 
   -DENABLE_FAST_MATH=1 \
   -DCUDA_FAST_MATH=1 \
   -DWITH_CUBLAS=1 \
-  -DCUDA_NVCC_FLAGS="-D_FORCE_INLINES" \
+  -DCUDA_NVCC_FLAGS="-D_FORCE_INLINES --expt-relaxed-constexpr" \
   -DBUILD_TIFF=ON \
   -DBUILD_opencv_java=OFF \
   -DENABLE_AVX=ON \
@@ -92,10 +93,10 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip 
   -DPYTHON_PACKAGES_PATH=$(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
   && make -j8 \
   && make install \
-  && rm /opencv-3.4.0.zip \
-  && rm /opencv_contrib-3.4.0.zip \
-  && rm -r /opencv-3.4.0 \
-  && rm -r /opencv_contrib-3.4.0
+  && rm /opencv-3.4.1.zip \
+  && rm /opencv_contrib-3.4.1.zip \
+  && rm -r /opencv-3.4.1 \
+  && rm -r /opencv_contrib-3.4.1
 
 RUN apt-get install -y x11-apps \
   python3-tk
