@@ -6,7 +6,12 @@ RUN apt-get update
 
 RUN apt-get install -y \
   wget \
-  cuda-core-9-0
+  cuda-9-0 \
+  cuda-command-line-tools-9-0 \
+  cuda-core-9-0 \
+  cuda-runtime-9-0 \
+  cuda-toolkit-9-0
+
 
 RUN apt-get install -y build-essential \
   cmake \
