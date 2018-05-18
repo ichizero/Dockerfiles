@@ -72,38 +72,49 @@ RUN pip3 --no-cache-dir install \
   py3nvml
 
 WORKDIR /
-RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip -O opencv-3.4.0.zip \
-  && wget https://github.com/opencv/opencv_contrib/archive/3.4.0.zip -O opencv_contrib-3.4.0.zip \
-  && unzip -q opencv-3.4.0.zip \
-  && unzip -q opencv_contrib-3.4.0.zip \
-  && cd opencv-3.4.0 \
+RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip \
+  && wget https://github.com/opencv/opencv_contrib/archive/3.4.1.zip -O opencv_contrib-3.4.1.zip \
+  && unzip -qq opencv-3.4.1.zip \
+  && unzip -qq opencv_contrib-3.4.1.zip \
+  && cd opencv-3.4.1 \
   && mkdir build \
   && cd build \
-  && cmake -DCMAKE_BUILD_TYPE=RELEASE \
-  -DCMAKE_INSTALL_PREFIX=/usr/local \
-  -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.0/modules \
-  -DBUILD_TIFF=ON \
-  -DBUILD_opencv_java=OFF \
-  -DWITH_CUDA=OFF \
-  -DENABLE_AVX=ON \
-  -DWITH_OPENGL=ON \
-  -DWITH_OPENCL=ON \
-  -DWITH_IPP=ON \
-  -DWITH_TBB=ON \
-  -DWITH_EIGEN=ON \
-  -DWITH_V4L=ON \
-  -DBUILD_TESTS=OFF \
-  -DBUILD_PERF_TESTS=OFF \
-  -DBUILD_opencv_python3=yes \
-  -DPYTHON_EXECUTABLE=$(which python3) \
-  -DPYTHON_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
-  -DPYTHON_PACKAGES_PATH=$(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
+  && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.1/modules \
+  -D CUDA_GENERATION=Auto \
+  -D WITH_CUDA=ON \
+  -D ENABLE_FAST_MATH=1 \
+  -D CUDA_FAST_MATH=1 \
+  -D WITH_CUBLAS=1 \
+  -D CUDA_NVCC_FLAGS="-D_FORCE_INLINES --expt-relaxed-constexpr" \
+  -D BUILD_TIFF=ON \
+  -D BUILD_opencv_java=OFF \
+  -D ENABLE_AVX=ON \
+  -D FORCE_VTK=ON \
+  -D WITH_OPENGL=ON \
+  -D WITH_OPENCL=ON \
+  -D WITH_IPP=ON \
+  -D WITH_TBB=ON \
+  -D WITH_QT=ON \
+  -D WITH_GDAL=ON \
+  -D WITH_EIGEN=ON \
+  -D WITH_XINE=ON\
+  -D WITH_V4L=ON \
+  -D BUILD_TESTS=OFF \
+  -D BUILD_PERF_TESTS=OFF \
+  -D BUILD_opencv_python3=yes \
+  -D PYTHON_EXECUTABLE=$(which python3) \
+  -D PYTHON_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+  -D PYTHON_PACKAGES_PATH=$(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
   && make -j8 \
   && make install \
-  && rm /opencv-3.4.0.zip \
-  && rm /opencv_contrib-3.4.0.zip \
-  && rm -r /opencv-3.4.0 \
-  && rm -r /opencv_contrib-3.4.0
+  && /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf' \
+  && ldconfig \
+  && rm /opencv-3.4.1.zip \
+  && rm /opencv_contrib-3.4.1.zip \
+  && rm -r /opencv-3.4.1 \
+  && rm -r /opencv_contrib-3.4.1
 
 RUN apt-get install -y x11-apps \
   python3-tk
