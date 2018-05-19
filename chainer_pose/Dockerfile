@@ -10,11 +10,6 @@ RUN apt-get update -y && \
     python3-setuptools && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-RUN pip3 install --no-cache-dir \
-    cupy-cuda90 \
-    chainer
-
-
 RUN apt-get update
 
 RUN apt-get install -y \
@@ -65,11 +60,13 @@ RUN apt-get install -y python2.7-dev python3-dev
 
 # Python dependencies
 RUN pip3 --no-cache-dir install \
+  cupy-cuda90 \
   numpy \
   hdf5storage \
   h5py \
   scipy \
-  py3nvml
+  py3nvml \
+  chainer
 
 WORKDIR /
 RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip \
