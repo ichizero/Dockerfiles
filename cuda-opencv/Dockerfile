@@ -19,6 +19,10 @@ RUN apt install -y \
   python3-setuptools \
   python3-tk
 
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+  python3 get-pip.py && \
+  rm get-pip.py
+
 RUN pip3 --no-cache-dir install \
   cupy-cuda91 \
   numpy
