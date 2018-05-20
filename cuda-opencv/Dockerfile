@@ -64,6 +64,8 @@ RUN apt install -y libgtk-3-dev
 # For optimization
 RUN apt install -y libatlas-base-dev gfortran pylint
 
+RUN apt install -y qt5-default
+
 WORKDIR /
 RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip \
   && wget https://github.com/opencv/opencv_contrib/archive/3.4.1.zip -O opencv_contrib-3.4.1.zip \

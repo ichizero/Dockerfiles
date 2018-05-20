@@ -1,4 +1,4 @@
-FROM ichizero/cuda-opencv
+FROM ichizero/cuda-opencv:latest
 
 LABEL maintainer="ichizero"
 
