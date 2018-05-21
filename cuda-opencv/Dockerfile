@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.1-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 LABEL maintainer="ichizero"
 
@@ -24,7 +24,7 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
   rm get-pip.py
 
 RUN pip3 --no-cache-dir install \
-  cupy-cuda91 \
+  cupy-cuda90 \
   numpy
 
 # ref) http://www.python36.com/how-to-install-opencv340-on-ubuntu1604/
