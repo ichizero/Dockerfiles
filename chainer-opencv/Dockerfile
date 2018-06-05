@@ -8,6 +8,7 @@ RUN apt update && \
 
 RUN pip3 install  --no-cache-dir \
   chainer \
+  chainerui \
   hdf5storage \
   h5py \
   scipy \
