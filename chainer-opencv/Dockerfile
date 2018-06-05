@@ -16,3 +16,6 @@ RUN pip3 install  --no-cache-dir \
   cython \
   argparse \
   matplotlib
+
+RUN chainerui db create && \
+  chainerui db upgrade
