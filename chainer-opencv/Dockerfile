@@ -17,5 +17,5 @@ RUN pip3 install  --no-cache-dir \
   argparse \
   matplotlib
 
-RUN chainerui db create && \
-  chainerui db upgrade
+# RUN chainerui db create && \
+#   chainerui db upgrade
