@@ -27,7 +27,7 @@ RUN pip3 install  --no-cache-dir \
   dill
 
 RUN pip3 install  --no-cache-dir \
-  tensorflow \
+  tensorflow-gpu \
   keras
 
 # For CUDA profiling, TensorFlow requires CUPTI.
