@@ -67,22 +67,22 @@ RUN apt install -y libatlas-base-dev gfortran pylint
 RUN apt install -y qt5-default
 
 WORKDIR /
-RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip \
-  && wget https://github.com/opencv/opencv_contrib/archive/3.4.1.zip -O opencv_contrib-3.4.1.zip \
-  && unzip -qq opencv-3.4.1.zip \
-  && unzip -qq opencv_contrib-3.4.1.zip \
-  && cd opencv-3.4.1 \
+RUN wget https://github.com/opencv/opencv/archive/3.4.3.zip -O opencv-3.4.3.zip \
+  && wget https://github.com/opencv/opencv_contrib/archive/3.4.3.zip -O opencv_contrib-3.4.3.zip \
+  && unzip -qq opencv-3.4.3.zip \
+  && unzip -qq opencv_contrib-3.4.3.zip \
+  && cd opencv-3.4.3 \
   && mkdir build \
   && cd build \
   && cmake -D CMAKE_BUILD_TYPE=RELEASE \
   -D CMAKE_INSTALL_PREFIX=/usr/local \
-  -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.1/modules \
-  # -D CUDA_GENERATION=Auto \
-  -D WITH_CUDA=OFF \
-  # -D ENABLE_FAST_MATH=1 \
-  # -D CUDA_FAST_MATH=1 \
-  # -D WITH_CUBLAS=1 \
-  # -D CUDA_NVCC_FLAGS="-D_FORCE_INLINES --expt-relaxed-constexpr" \
+  -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.3/modules \
+  -D CUDA_GENERATION=Auto \
+  -D WITH_CUDA=ON \
+  -D ENABLE_FAST_MATH=1 \
+  -D CUDA_FAST_MATH=1 \
+  -D WITH_CUBLAS=1 \
+  -D CUDA_NVCC_FLAGS="-D_FORCE_INLINES --expt-relaxed-constexpr" \
   -D BUILD_TIFF=ON \
   -D BUILD_opencv_java=OFF \
   -D ENABLE_AVX=ON \
@@ -106,9 +106,9 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.1.zip -O opencv-3.4.1.zip 
   && make install \
   && /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf' \
   && ldconfig \
-  && rm /opencv-3.4.1.zip \
-  && rm /opencv_contrib-3.4.1.zip \
-  && rm -r /opencv-3.4.1 \
-  && rm -r /opencv_contrib-3.4.1
+  && rm /opencv-3.4.3.zip \
+  && rm /opencv_contrib-3.4.3.zip \
+  && rm -r /opencv-3.4.3 \
+  && rm -r /opencv_contrib-3.4.3
 
 RUN apt clean
