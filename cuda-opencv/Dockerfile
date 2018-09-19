@@ -2,14 +2,26 @@ FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 LABEL maintainer="ichizero"
 
-RUN apt update
-
-RUN apt install -y \
+RUN apt update && \
+  apt install -y \
   build-essential \
   cmake \
   wget \
   unzip \
   git
+
+# Building a recent CMake to benefit from improvement in the CUDA workflow
+ENV CMAKE_VERSION=3.10
+ENV CMAKE_BUILD=2.1
+RUN mkdir ~/temp && cd ~/temp && \
+  wget https://github.com/mlamarre/CMake/archive/v${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz -O cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
+  tar -xzvf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
+  cd ~/temp/CMake-${CMAKE_VERSION}.${CMAKE_BUILD}/ && \
+  ./bootstrap --system-curl && \
+  make -j$(nproc) && make install && make clean && \
+  cd ~ && rm -rf temp
+
+WORKDIR /
 
 # Python3
 RUN apt install -y \
@@ -67,16 +79,20 @@ RUN apt install -y libatlas-base-dev gfortran pylint
 RUN apt install -y qt5-default
 
 WORKDIR /
-RUN wget https://github.com/opencv/opencv/archive/3.4.3.zip -O opencv-3.4.3.zip \
-  && wget https://github.com/opencv/opencv_contrib/archive/3.4.3.zip -O opencv_contrib-3.4.3.zip \
-  && unzip -qq opencv-3.4.3.zip \
-  && unzip -qq opencv_contrib-3.4.3.zip \
-  && cd opencv-3.4.3 \
+
+ENV OPENCV_VERSION="3.4.3"
+
+RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv-${OPENCV_VERSION}.zip \
+  && wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip -O opencv_contrib-${OPENCV_VERSION}.zip \
+  && unzip -qq opencv-${OPENCV_VERSION}.zip \
+  && unzip -qq opencv_contrib-${OPENCV_VERSION}.zip \
+  && cd opencv-${OPENCV_VERSION} \
   && mkdir build \
   && cd build \
   && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+  -D ENABLE_PRECOMPILED_HEADERS=OFF \
   -D CMAKE_INSTALL_PREFIX=/usr/local \
-  -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.3/modules \
+  -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-${OPENCV_VERSION}/modules \
   -D CUDA_GENERATION=Auto \
   -D WITH_CUDA=ON \
   -D ENABLE_FAST_MATH=1 \
@@ -89,6 +105,7 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.3.zip -O opencv-3.4.3.zip 
   -D FORCE_VTK=ON \
   -D WITH_OPENGL=ON \
   -D WITH_OPENCL=ON \
+  -D WITH_FFMPEG=ON \
   -D WITH_IPP=ON \
   -D WITH_TBB=ON \
   -D WITH_QT=ON \
@@ -102,13 +119,12 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.3.zip -O opencv-3.4.3.zip 
   -D PYTHON_EXECUTABLE=$(which python3) \
   -D PYTHON_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
   -D PYTHON_PACKAGES_PATH=$(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
-  && make -j8 \
-  && make install \
+  && make -j$(nproc) install \
   && /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf' \
   && ldconfig \
-  && rm /opencv-3.4.3.zip \
-  && rm /opencv_contrib-3.4.3.zip \
-  && rm -r /opencv-3.4.3 \
-  && rm -r /opencv_contrib-3.4.3
+  && rm /opencv-${OPENCV_VERSION}.zip \
+  && rm /opencv_contrib-${OPENCV_VERSION}.zip \
+  && rm -r /opencv-${OPENCV_VERSION} \
+  && rm -r /opencv_contrib-${OPENCV_VERSION}
 
 RUN apt clean
