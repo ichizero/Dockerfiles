@@ -11,15 +11,15 @@ RUN apt update && \
   git
 
 # Building a recent CMake to benefit from improvement in the CUDA workflow
-ENV CMAKE_VERSION=3.10
-ENV CMAKE_BUILD=2.1
-RUN mkdir ~/temp && cd ~/temp && \
-  wget https://github.com/mlamarre/CMake/archive/v${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz -O cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
-  tar -xzvf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
-  cd ~/temp/CMake-${CMAKE_VERSION}.${CMAKE_BUILD}/ && \
-  ./bootstrap --system-curl && \
-  make -j$(nproc) && make install && make clean && \
-  cd ~ && rm -rf temp
+# ENV CMAKE_VERSION=3.10
+# ENV CMAKE_BUILD=2.1
+# RUN mkdir ~/temp && cd ~/temp && \
+#   wget https://github.com/mlamarre/CMake/archive/v${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz -O cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
+#   tar -xzvf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
+#   cd ~/temp/CMake-${CMAKE_VERSION}.${CMAKE_BUILD}/ && \
+#   ./bootstrap --system-curl && \
+#   make -j$(nproc) && make install && make clean && \
+#   cd ~ && rm -rf temp
 
 WORKDIR /
 
