@@ -2,6 +2,8 @@ FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 LABEL maintainer="ichizero"
 
+WORKDIR /
+
 RUN apt update && \
   apt install -y \
   build-essential \
@@ -9,19 +11,6 @@ RUN apt update && \
   wget \
   unzip \
   git
-
-# Building a recent CMake to benefit from improvement in the CUDA workflow
-# ENV CMAKE_VERSION=3.10
-# ENV CMAKE_BUILD=2.1
-# RUN mkdir ~/temp && cd ~/temp && \
-#   wget https://github.com/mlamarre/CMake/archive/v${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz -O cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
-#   tar -xzvf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz && \
-#   cd ~/temp/CMake-${CMAKE_VERSION}.${CMAKE_BUILD}/ && \
-#   ./bootstrap --system-curl && \
-#   make -j$(nproc) && make install && make clean && \
-#   cd ~ && rm -rf temp
-
-WORKDIR /
 
 # Python3
 RUN apt install -y \
@@ -39,7 +28,6 @@ RUN pip3 --no-cache-dir install \
   cupy-cuda90 \
   numpy
 
-# ref) http://www.python36.com/how-to-install-opencv340-on-ubuntu1604/
 RUN apt install -y \
   libgtk2.0-dev \
   pkg-config \
@@ -47,7 +35,6 @@ RUN apt install -y \
   libavformat-dev \
   libswscale-dev
 
-# To process images
 RUN apt install -y \
   python-dev \
   python-numpy \
@@ -59,26 +46,18 @@ RUN apt install -y \
   libjasper-dev \
   libdc1394-22-dev
 
-# To process videos
-RUN apt install -y \
-  libavcodec-dev \
-  libavformat-dev \
-  libswscale-dev \
-  libv4l-dev
-
 RUN apt install -y \
   libxvidcore-dev \
-  libx264-dev
+  libx264-dev \
+  libv4l-dev \
+  ffmpeg
 
-# For GUI
-RUN apt install -y libgtk-3-dev
-
-# For optimization
-RUN apt install -y libatlas-base-dev gfortran pylint
-
-RUN apt install -y qt5-default
-
-WORKDIR /
+RUN apt install -y \
+  libgtk-3-dev \
+  libatlas-base-dev \
+  gfortran \
+  pylint \
+  qt5-default
 
 ENV OPENCV_VERSION="3.4.3"
 
@@ -127,4 +106,5 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O openc
   && rm -r /opencv-${OPENCV_VERSION} \
   && rm -r /opencv_contrib-${OPENCV_VERSION}
 
-RUN apt clean
+RUN apt autoremove && \
+  apt clean
