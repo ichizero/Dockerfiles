@@ -8,6 +8,7 @@ RUN apt update && \
 
 RUN pip3 install  --no-cache-dir \
   chainer \
+  chainercv \
   chainerui \
   hdf5storage \
   h5py \
@@ -15,6 +16,7 @@ RUN pip3 install  --no-cache-dir \
   py3nvml \
   cython \
   argparse \
+  tqdm \
   matplotlib
 
 # RUN chainerui db create && \
