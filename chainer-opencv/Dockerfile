@@ -15,5 +15,8 @@ RUN pip3 install  --no-cache-dir \
   tqdm \
   matplotlib
 
+RUN rm /usr/bin/python && \
+  ln -s /usr/bin/python3 /usr/bin/python
+
 # RUN chainerui db create && \
 #   chainerui db upgrade
