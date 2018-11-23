@@ -106,5 +106,9 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O openc
   && rm -r /opencv-${OPENCV_VERSION} \
   && rm -r /opencv_contrib-${OPENCV_VERSION}
 
+RUN apt install -y language-pack-ja-base language-pack-ja && \
+  locale-gen ja_JP.UTF-8 && \
+  echo export LANG=ja_JP.UTF-8 >> ~/.bashrc
+
 RUN apt autoremove && \
   apt clean
