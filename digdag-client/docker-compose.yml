@@ -1,0 +1,9 @@
+version: "3"
+services:
+  client:
+    image: ichizero/digdag-client:latest
+    build: .
+    volumes:
+      - ./digdag-conf/user-config:/root/.config/digdag/config
+    tty: true
+    entrypoint: /bin/bash

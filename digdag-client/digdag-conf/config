@@ -1,0 +1,2 @@
+client.http.endpoint = http://digdag_server:65432
+
